@@ -76,3 +76,16 @@ try:
 except:
     model.fit(training, output, n_epoch=1000, batch_size=8, show_metric=True)
     model.save("model.tflearn")
+    
+def bag_of_words(s, words):
+    bag = [0 for _ in range(len(words))]
+    
+    s_words = nltk.word_tokenize(s)
+    s_words = [stemmer.stem(word.lower()) for word in s_words]
+    
+    for se in s_words:
+        for i, w in enumerate(words):
+            if w == se:
+                bag[i].append(1)
+                
+    return numpy.array(bag)
