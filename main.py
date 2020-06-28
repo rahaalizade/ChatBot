@@ -33,7 +33,7 @@ labels = sorted(labels)
 training = []
 output = []
 
-out_empty = [0 for _ in range(len(classes))]
+out_empty = [0 for _ in range(len(labels))]
 
 for x, doc in enumerate(docs_x):
     bag = []
@@ -45,3 +45,12 @@ for x, doc in enumerate(docs_x):
             bag.append(1)
         else:
             bag.append(0)
+    
+    output_row = out_empty[:]
+    output_row[labels.index(docs_y[x])] = 1
+    
+    training.append(bag)
+    output.append(output_row)
+    
+training = numpy.array(training)
+output = numpy.array(output)
