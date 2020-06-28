@@ -1,3 +1,3 @@
 # ChatBot
-An AI ChatBot with deep learning
+AI ChatBot with deep learning and using NLP
 
