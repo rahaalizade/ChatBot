@@ -67,7 +67,7 @@ tensorflow.reset_default_graph()
 net = tflearn.input_data(shape=[None, len(training[0])])
 net = tflearn.fully_connected(net, 8)
 net = tflearn.fully_connected(net, 8)
-net = tflearn.fully_connected(net, len(output[0]),activation="softmax")
+net = tflearn.fully_connected(net, len(output[0]),activation="softplus")
 net = tflearn.regression(net)
 
 model = tflearn.DNN(net)
@@ -93,14 +93,16 @@ def bag_of_words(s, words):
 def chat():
     print("Start talking with a bot!(Type exit to stop)")
     while True:
-        inp = input("U: ")
+        inp = input("You: ")
         if inp.lower() == "exit":
             break
-        result = model.predict([bag_of_words(inp, words)])
+        result = model.predict([bag_of_words(inp, words)])[0]
         result_index = numpy.argmax(result)
         tag = labels[result_index]
-        
+        print(result)
+
         for tg in data["intents"]:
             if tg['tag'] == tag:
                 responses = tg['responses']
         print(random.choice(responses))
+chat()
