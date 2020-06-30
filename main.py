@@ -1,6 +1,5 @@
 import nltk
 from nltk.stem.lancaster import LancasterStemmer
-stemmer = LancasterStemmer()
 import numpy
 import tflearn
 import tensorflow
@@ -8,13 +7,17 @@ import random
 import json
 import pickle
 
+stemmer = LancasterStemmer()
+
 with open("intents.json") as file:
     data = json.load(file)
+
+
 try:
     with open("data.pickle","rb") as f:
         words, labels, training, output = pickle.load(f)
 
-except:
+except FileNotFoundError:
     words = []
     labels = []
     docs_x = []
@@ -57,6 +60,9 @@ except:
         training.append(bag)
         output.append(output_row)
     
+
+
+
 training = numpy.array(training)
 output = numpy.array(output)
 
@@ -73,7 +79,7 @@ net = tflearn.regression(net)
 model = tflearn.DNN(net)
 try:
     model.load("model.tflearn")
-except:
+except FileNotFoundError:
     model.fit(training, output, n_epoch=1000, batch_size=8, show_metric=True)
     model.save("model.tflearn")
     
@@ -99,10 +105,11 @@ def chat():
         result = model.predict([bag_of_words(inp, words)])[0]
         result_index = numpy.argmax(result)
         tag = labels[result_index]
-        print(result)
 
         for tg in data["intents"]:
             if tg['tag'] == tag:
                 responses = tg['responses']
-        print(random.choice(responses))
-chat()
+        print("AI: " + random.choice(responses))
+
+if __name__ == "__main__":
+    chat()
