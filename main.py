@@ -11,6 +11,8 @@ stemmer = LancasterStemmer()
 
 with open("intents.json") as file:
     data = json.load(file)
+
+
 try:
     with open("data.pickle","rb") as f:
         words, labels, training, output = pickle.load(f)
@@ -103,11 +105,11 @@ def chat():
         result = model.predict([bag_of_words(inp, words)])[0]
         result_index = numpy.argmax(result)
         tag = labels[result_index]
-        print(result)
 
         for tg in data["intents"]:
             if tg['tag'] == tag:
                 responses = tg['responses']
-        print(random.choice(responses))
+        print("AI: " + random.choice(responses))
+
 if __name__ == "__main__":
     chat()
